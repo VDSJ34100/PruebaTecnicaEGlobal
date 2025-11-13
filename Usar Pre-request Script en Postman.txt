@@ -1,0 +1,40 @@
+Login
+Endpoint: POST http://localhost:8080/api/login
+{
+  "usuario": "admin",
+  "password": "1234"
+}
+
+
+Usar Pre-request Script en Postman
+Si quieres que Postman calcule la firma automáticamente:
+Ve a la pestaña Pre-request Script del request.
+Pega esto:
+const CryptoJS = require('crypto-js');
+
+let operacion = "venta";
+let importe = "100.00";
+let cliente = "Carlos";
+
+let texto = operacion + importe + cliente;
+let firma = CryptoJS.SHA256(texto).toString(CryptoJS.enc.Hex);
+
+pm.environment.set("firma", firma);
+
+En el body usa la variable así:
+{
+  "operacion": "venta",
+  "importe": "100.00",
+  "cliente": "Carlos",
+  "firma": "{{firma}}"
+}
+
+Cancelar Transacción
+Endpoint: PATCH http://localhost:8080/api/operacion/cancelar?id=1&referencia=123456
+
+
+Consultar todas las transacciones
+Endpoint: GET http://localhost:8080/api/operacion/consultar
+
+Buscar transacción por referencia
+Endpoint: GET http://localhost:8080/api/operacion/buscar/123456
